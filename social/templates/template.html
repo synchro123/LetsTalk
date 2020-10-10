@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ru" class="h-100">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    {% block fav %}<link rel="icon" href="/mail.png" type="image/x-icon">{% endblock %}
+    <title>Let's Talk</title>
+    <style type="text/css">
+    	#topBtn {
+    		position: fixed;
+    		height: 100%;
+    		width: 6%;
+    		top: 0;
+    	}
+    	.bg-dred{
+			background-color: #8B0000
+		}
+
+		.bg-red{
+			background-color: #B82D2D
+		}
+
+		.bg-lred{
+			background-color: #D54646
+		}
+
+		body{
+			background-color: #F4CCC9
+		}
+
+		.bg-llred{
+			background-color: #F4D2D2
+		}
+    </style>
+  </head>
+  <body>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  	<div class="container bg-llred shadow" id="center-fixed-container" style="position: fixed; top: 0; bottom: 0; height: 100%; left: 50%; transform: translate(-50%, 0);"></div>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dred fixed-top">
+		<div class="container">
+	  <a class="navbar-brand" href="#">Let's Talk</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+
+	  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+	    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+	    	{% block nav %}{% endblock %}
+	    </ul>
+	    {% block auth %}{% endblock %}
+	</nav>
+  	<div class="d-none d-xl-block"><div id="topBtn" class="bg-light text-dark text-center user-select-none" style="display: none;"><p style="margin-top: 123px;"><b>Наверх</b></p></div></div>
+  	<div class="navbar navbar-expand-lg"><a class="navbar-brand" href="#">.</a></div>
+  	<div class="container h-100">
+	  	{% block content %}{% endblock %}
+  	</div>
+
+	  {% block toup %}
+    <script type="text/javascript">
+	  $(function() {
+	  $('#topBtn').fadeOut();
+	  $(window).scroll(function() {
+	  if($(this).scrollTop() > 30) {
+	  $('#topBtn').fadeIn();
+	  } else {
+	  $('#topBtn').fadeOut();
+	  }
+	  });
+	  $('#topBtn').click(function() {
+	  $('body,html').animate({scrollTop:0},700);
+	  });
+	  });
+	</script>
+	  {% endblock %}
+	{% block extrajs %}{% endblock %}
+	
+
+	<!--<script type="text/javascript">
+		$(function() {
+			$(window).scroll(function() {
+				
+				$('body,html').animate({scrollTop:0},100000000);
+			});
+		});
+	</script>-->
+  </body>
+</html>

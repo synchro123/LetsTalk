@@ -1,0 +1,50 @@
+{% extends 'main.html' %}
+{% block fav %}<link rel="icon" href="https://psv4.userapi.com/c856220/u254911891/docs/d4/bd013e813253/tg.png?extra=QzgEq-OIR8snSzF4UVYNw3WCWrqbbCos61dMTBnoM3ZvdfZZh3Zi_kU8kuAaMIhwktoESQwvlIopNAwbHiWw4txGbRf7rULxKQjaqhOqUpP2yazZv_XHcKBmoKA4IRb1F2SbYpgSzU7cYIbdg3ADXWWfnao" type="image/x-icon">{% endblock %}
+{% block content %}
+<div class="card h-100">
+	<div class="card-header">
+		Телеграф
+	</div>
+	<div class="card-body h-100">
+		{% load custom_tags %}
+		{% if chats.count == 0 %}
+			<div class="alert alert-secondary">Нет ни одного начатого диалога</div>
+		{% endif %}
+		<div class="list-group">
+		{% for chat in chats %}
+			{% if chat.message_set.count != 0 %}
+				{% with last_message=chat.message_set.last %}
+					{% get_companion user chat as companion %}
+					<a href="{{ chat.get_absolute_url }}" class="list-group-item list-group-item-action">
+					<!--<a class="list-group-item {% if companion == last_message.author and not last_message.is_readed %}unreaded{% endif %}" href="{{ chat.get_absolute_url }}">-->
+						<div class="d-flex" >
+							<img src="{{companion.userprofile.avatar}}" class="rounded-circle d-inline" alt="..." style="width: 45px; height: 45px">
+							<div class="ml-2">
+								<span class=""  href="/id{{com.author.id}}" style="font-size: 12pt;">{{companion.first_name}} {{companion.last_name}}</span>
+								<span class="text-muted" style="font-size: 10pt;">({{last_message.pub_date}})</span>
+								{% get_unreaded_messages_count user chat as unreadedcount %}
+								{% if unreadedcount > 0 %}
+								<span class="badge badge-danger">{{unreadedcount}}</span>
+								{% endif %}
+								{% if companion != last_message.author %}
+									<div class="d-block ml-2 mt-2">
+										<div class="d-flex" style="height: 40px">
+											<img src="{{last_message.author.userprofile.avatar}}" class="rounded-circle d-inline" alt="..." style="width: 25px; height: 25px">
+											<div class="ml-2">
+												<span class=""  href="/id{{com.author.id}}" style="font-size: 12pt;">{{ last_message.message|truncatechars_html:"200"|safe|striptags }}</span>
+											</div>
+										</div>
+									</div>
+								{% else %}
+									<div>{{ last_message.message|truncatechars_html:"200"|safe|striptags }}</div>
+								{% endif %}
+							</div>
+						</div>
+					</a>
+				{% endwith %}
+			{% endif %}
+		{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

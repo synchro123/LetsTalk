@@ -1,0 +1,52 @@
+{% extends 'template.html' %}
+
+{% block content %}
+<div class="row" style="margin-top: 15px">
+	<div class="col-8 d-none d-xl-block">
+		<div class="card">
+			<div class="card-header">
+
+			</div>
+			<div class="card-body">
+
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 col-xl-4">
+		<div class="card">
+			<div class="card-header">
+				Вход
+			</div>
+			<div class="card-body">
+				<form method="post">
+					{% csrf_token %}
+					<input type="text" name="username" class="form-control" placeholder="Имя пользователя" required="">
+					<input type="password" name="pass" class="form-control mt-2" placeholder="Пароль" required="">
+					<button type="submit" class="btn btn-dark bg-red mt-2 col-4 d-inline">Вход</button>
+					<a class="btn btn-link mt-2">Забыли пароль?</a>
+				</form>
+			</div>
+		</div>
+		<div class="card mt-3">
+			<div class="card-header">
+				Регистрация
+			</div>
+			<div class="card-body">
+				<div class="text-center">
+					<h5>Впервые у нас?</h5>
+					<h6 class="text-muted">Пройдите регистрацию</h6>
+				</div>
+				<form action="/register/" method="get">
+					<input type="text" name="n" class="form-control" placeholder="Имя" required="">
+					<input type="text" name="sn" class="form-control mt-2" placeholder="Фамилия" required="">
+
+					<label class="text-muted mt-4">Дата рождения:</label>
+					<input type="date" name="bdate" class="form-control" required="">
+
+					<button type="submit" class="btn btn-dark bg-red mt-2 btn-block">Продолжить регистрацию</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

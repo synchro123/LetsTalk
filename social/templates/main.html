@@ -1,0 +1,33 @@
+{% extends 'template.html' %}
+
+{% block nav %}
+{% url 'profile' request.user.id as mypage %}
+<li class="nav-item {% if mypage in request.path %}active{% endif %}">
+	<a class="nav-link" href="{{mypage}}">Моя страница</a>
+</li>
+<li class="nav-item {% if '/search' == request.path %}active{% endif %}">
+	<a class="nav-link" href="#">Поиск</a>
+</li>
+<li class="nav-item {% if '/telegraph' in request.path %}active{% endif %}">
+	<a class="nav-link" href="/telegraph">Телеграммы</a>
+</li>
+<li class="nav-item {% if '/friends' in request.path %}active{% endif %}">
+	<a class="nav-link" href="/friends{{request.user.id}}">Друзья</a>
+</li>
+{% endblock %}
+
+{% block auth %}
+<div class="btn-group">
+	<button type="button" class="btn btn-light border dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+		<img src="{{request.user.userprofile.avatar}}" alt="000" class="rounded-circle" style="width: 25px; height: 25px"> {{request.user.first_name}} {{request.user.last_name}}
+	</button>
+	<div class="dropdown-menu dropdown-menu-lg-right">
+		<a href="/id{{request.user.id}}" class="dropdown-item" type="button">Моя страница</a>
+		<a class="dropdown-item" href="/edit">Настройки</a>
+		<div class="dropdown-divider"></div>
+		<a class="dropdown-item" href="/logout">Выйти</a>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="card h-100">
+	<div class="card-header">
+		Друзья
+	</div>
+	<div class="card-body h-100">
+		{% if friends_count <= 0 %}
+			<div class="alert alert-secondary">Нет ни одного друга.</div>
+			<a class="btn btn-dark bg-dred btn-lg">Найти друзей</a>
+		{% else %}
+			<div class="list-group">
+			{% for friend in friends %}
+					<div class="list-group-item list-group-item-action user-select-none">
+						<img src="{{friend.userprofile.avatar}}" class="rounded-circle d-inline" alt="..." style="width: 40px; height: 40px">
+						<a href="/id{{friend.id}}" class="ml-2">{{friend.first_name}} {{friend.last_name}}</a>
+						<a href="/friendship_request/{{friend.id}}?n=/friends{{user.id}}" class="btn btn-secondary float-right">Удалить из друзей</a>
+						<a href="/telegraph/dialogue/start/{{friend.id}}" class="btn btn-dark bg-dred float-right mr-1">Написать</a>
+					</div>
+			{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

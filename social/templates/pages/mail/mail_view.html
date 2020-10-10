@@ -1,0 +1,138 @@
+{% extends 'main.html' %}
+{% block extrajs %}
+<script type="text/javascript">
+    function scroll_down(){
+        content_position = jQuery(window).scrollTop();
+        $('body,html').animate({scrollTop:$(window).height()},100);
+    }
+
+    scroll_down()
+
+    var read = '/api/read/' + $("#message_form").attr("data-chat")
+
+    $.ajax({
+        url: read,
+        method: 'GET',
+        data: {},
+        success: function(data){
+            console.log(data)
+
+        },
+        error: function(error){
+            console.log(error)
+            console.log("error")
+        }
+    })
+
+    $("#center-fixed-container").addClass("bg-light")
+
+    $("#id_message_send").click(function(e){
+        e.preventDefault()
+        txt = $("#id_message").val()
+        $("#id_message").val("")
+        url = "/api/send_message";
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            data: {'chat_id': '{{chat.id}}','text': txt},
+            success: function(data){
+                console.log(data);
+                if(data.success){
+                    $("#messages").append("<div class=\"row mt-2 w-100\" id=\"msg" + data.msg_id + "\"><div class=\"col-2 col-sm-1\"><img src=\"{{request.user.userprofile.avatar}}\" class=\"rounded-circle d-inline\" alt=\"...\" style=\"width: 40px; height: 40px\"></div><div class=\"col-10 col-sm-11\"><a href=\"/id{{request.user.id}}\">{{ request.user.first_name }} {{ request.user.last_name }}</a><span class=\"float-right text-muted\">(" + data.curr_time + ")</span><div class=\"mt-1\">" + txt + "</div></div></div>");
+                }
+                scroll_down();
+            },
+            error: function(error){
+                console.log(error);
+                console.log("error");
+            }
+        })
+    })
+
+    $(".delmsg-btn").click(function(e){
+        e.preventDefault()
+        this_ = $(this)
+        msgid = this_.attr("data-msgid")
+        url = "/api/remove_message/" + msgid
+        divid = '#msg'+msgid
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            data: {},
+            success: function(data){
+                console.log(data)
+                if(data.removed){
+                    $(divid).remove()
+                }
+            },
+            error: function(error){
+                console.log(error)
+                console.log("error")
+            }
+        })
+    })
+
+    setInterval(function(){
+        $.ajax({
+            url: '/api/get_last_unreaded_message',
+            method: 'GET',
+            data: {'chat_id': '{{chat.id}}'},
+            success: function(data){
+                console.log(data);
+                if(data.success){
+                    $.ajax({
+                        url: read,
+                        method: 'GET',
+                        data: {},
+                        success: function(data){
+                            console.log(data)
+
+                        },
+                        error: function(error){
+                            console.log(error)
+                            console.log("error")
+                        }
+                    })
+                    $("#messages").append("<div class=\"row mt-2 w-100\" id=\"msg" + data.msg_id + "\"><div class=\"col-2 col-sm-1\"><img src=\"" + data.user_avatar + "\" class=\"rounded-circle d-inline\" alt=\"...\" style=\"width: 40px; height: 40px\"></div><div class=\"col-10 col-sm-11\"><a href=\"/id" + data.user_id + "\">" + data.user_firstname + " " + data.user_lastname + "</a><span class=\"float-right text-muted\">(" + data.curr_time + ")</span><div class=\"mt-1\">" + data.text + "</div></div></div>");
+                }
+            },
+            error: function(error){
+                console.log(error);
+                console.log("error");
+            }
+        })
+    }, 500)
+</script>
+{% endblock %}
+{% block fav %}<link rel="icon" href="https://psv4.userapi.com/c856220/u254911891/docs/d4/bd013e813253/tg.png?extra=QzgEq-OIR8snSzF4UVYNw3WCWrqbbCos61dMTBnoM3ZvdfZZh3Zi_kU8kuAaMIhwktoESQwvlIopNAwbHiWw4txGbRf7rULxKQjaqhOqUpP2yazZv_XHcKBmoKA4IRb1F2SbYpgSzU7cYIbdg3ADXWWfnao" type="image/x-icon">{% endblock %}
+{% block content %}
+    <div id='block' class="w-100 h-100 shadow">
+        {% if not chat %}
+                    Невозможно начать беседу. Не найден пользователь или вы не имеете доступа к данной беседе.
+        {% else %}
+                <div id="messages">
+                    {% for message in chat.message_set.all %}
+                            {% include 'pages/mail/msg.html' with message_item=message %}
+                    {% endfor %}
+                </div>
+        {% endif %}
+    </div>
+    <div style="height: 70px; display: block;">
+        
+    </div>    
+    <div class="container bg-light shadow" style="position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 0);">
+        {% if chat %}
+            <div data-chat='{{chat.id}}' id="message_form">
+                <div class="input-group mb-3 w-100">
+                    <input name="message" placeholder="Введите текст телеграммы..." class="form-control" required="" id="id_message">
+                    <div class="input-group-append">
+                        <button type="submit" id="id_message_send" class="btn btn-dark bg-red">Отправить</button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block toup %}{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'main.html' %}
+{% block extrajs %}
+	<script type="text/javascript">
+		$('#editprofile-apply').click(function(e){
+			e.preventDefault()
+			var this_ = $(this)
+
+			var first_name = $('#first_name-fld').val()
+			var last_name = $('#last_name-fld').val()
+			var birth_date = $('#date-fld').val()
+
+			var target_url = 'user_update'
+
+			$.ajax({
+				url: target_url,
+				method: 'GET',
+				data: {
+					'first_name': first_name,
+					'last_name': last_name,
+					'birth_date': birth_date
+				},
+				success: function(data){
+					console.log(data)
+					console.log(target_url)
+					if(data.success){
+						//document.location.reload()
+					}
+				},
+				error: function(error){
+					console.log(error)
+					console.log("error")
+				}
+			})
+		})
+	</script>
+{% endblock %}
+{% block content %}
+<div class="m-auto col-md-5 col-xs-10">
+	<div class="card mt-5">
+		<div class="card-header">
+			Редактирование страницы
+		</div>
+		<div class="card-body">
+			<form method="post">
+				{% csrf_token %}
+				<label class="text-muted mt-4">URL аватара:</label>
+				<div class="input-group">
+					<input class="form-control" name="avatar" value="{{request.user.userprofile.avatar}}">
+					<div class="input-group-append">
+						<button type="submit" class="btn btn-dark bg-red ">Применить</button>
+					</div>
+				</div>
+			</form>
+			<br>
+			<label class="text-muted mt-4">Имя:</label>
+			<input class="form-control" id='first_name-fld' type="text" value="{{request.user.first_name}}">
+			<label class="text-muted mt-4">Фамилия:</label>
+			<input class="form-control" id='last_name-fld' type="text" value="{{request.user.last_name}}">
+			<br>
+			<label class="text-muted mt-4">Дата рождения:</label>
+			<input class="form-control" id='date-fld' type="date" value='{{request.user.userprofile.birth_date|date:"Y-m-d" }}'>
+			<br>
+			<button id='editprofile-apply' class="btn btn-dark bg-red btn-block">Применить изменения</button>
+		</div>
+	</div>
+</div>
+{% endblock %}
